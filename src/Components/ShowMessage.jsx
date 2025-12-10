@@ -10,7 +10,7 @@ export default function ShowMessage() {
 
         async function fetchMessage() {
             try {
-                const url = (`http://localhost:8080/api/secretmessage/showmessage/${uuid}`);
+                const url = (`http://192.168.77.16:8080/api/secretmessage/showmessage/${uuid}`);
 
                 const res = await fetch(url, {
                     method: "POST",
