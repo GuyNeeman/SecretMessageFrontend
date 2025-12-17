@@ -3,18 +3,28 @@ import { useState } from "react";
 export default function CreateMessage() {
     const [message, setMessage] = useState("");
     const [password, setPassword] = useState("");
-    const [day, setDay] = useState("0");
-    const [hour, setHour] = useState("0");
-    const [minute, setMinute] = useState("0");
+    const [day, setDay] = useState("");
+    const [hour, setHour] = useState("");
+    const [minute, setMinute] = useState("");
+    const [minute2, setMinute2] = useState("");
     const [selfdelete, setSelfdelete] = useState(true);
     const [error, setError] = useState("");
     const [response, setResponse] = useState("");
     const [sent, setSent] = useState(false);
 
     async function onSubmit(e) {
+        let totalMinutes;
         e.preventDefault();
 
-        const url = "http://192.168.77.16:8080/api/secretmessage/createmessage";
+
+        if(selfdelete === true ) {
+            totalMinutes = null;
+        } else {
+            totalMinutes = Number(minute) + Number(day) * 1440 + Number(hour) * 60;
+        }
+        setMinute2(totalMinutes);
+        console.log(totalMinutes);
+        const url = "http://localhost:8080/api/secretmessage/createmessage";
         try {
             const res = await fetch(url, {
                 method: "POST",
@@ -22,9 +32,7 @@ export default function CreateMessage() {
                 body: JSON.stringify({
                     message,
                     password,
-                    expirationday: day,
-                    expirationhour: hour,
-                    expirationminute: minute,
+                    expirationminute: totalMinutes,
                     selfdelete
                 })
             });
@@ -60,11 +68,11 @@ export default function CreateMessage() {
                     /> <br/>
                     {!selfdelete && (
                         <>
-                            <label>Expiration Day</label><br/>
+                            <label>Duration Day</label><br/>
                             <input type="number" value={day} onChange={(e) => setDay(e.target.value)}/><br/>
                             <label>Duration Hour</label><br/>
                             <input type="number" value={hour} onChange={(e) => setHour(e.target.value)}/><br/>
-                            <label>Expiration Minute</label><br/>
+                            <label>Duration Minute</label><br/>
                             <input type="number" value={minute} onChange={(e) => setMinute(e.target.value)}/><br/>
 
                         </>
@@ -76,10 +84,10 @@ export default function CreateMessage() {
             {sent && (
                 <div>
                     <p>Your link is:</p>
-                    <p>http://192.168.77.16:5173/show/{response}</p>
+                    <p>http://localhost:5173/show/{response}</p>
                     <button
                         onClick={() => {
-                            navigator.clipboard.writeText(`http://192.168.77.16:5173/show/${response}`);
+                            navigator.clipboard.writeText(`http://localhost:5173/show/${response}`);
                         }}
                     >
                         Copy Link
