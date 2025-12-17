@@ -3,6 +3,7 @@ import { useState } from "react";
 export default function CreateMessage() {
     const [message, setMessage] = useState("");
     const [password, setPassword] = useState("");
+    const [language, setLanguage] = useState("");
     const [day, setDay] = useState("");
     const [hour, setHour] = useState("");
     const [minute, setMinute] = useState("");
@@ -33,7 +34,8 @@ export default function CreateMessage() {
                     message,
                     password,
                     expirationminute: totalMinutes,
-                    selfdelete
+                    selfdelete,
+                    language
                 })
             });
 
@@ -60,6 +62,14 @@ export default function CreateMessage() {
                     <textarea value={message} onChange={(e) => setMessage(e.target.value)}/><br/>
                     <label>Password</label><br/>
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}/><br/>
+                    <label>Syntax Highlighting</label><br/>
+                    <select onChange={e => setLanguage(e.target.value)}>
+                        <option value="text"></option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                    </select><br/>
                     <label>Self Delete</label><br/>
                     <input
                         type="checkbox"

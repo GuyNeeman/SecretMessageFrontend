@@ -1,5 +1,10 @@
-import { useEffect, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import { useParams } from "react-router-dom";
+import Prism from "prismjs";
+import "prismjs/themes/prism-tomorrow.css";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-java";
+import "prismjs/components/prism-python";
 
 export default function ShowMessage() {
     const { uuid } = useParams();
@@ -7,7 +12,9 @@ export default function ShowMessage() {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(true);
     const [exist, setExist] = useState(false);
+    const [language, setLanguage] = useState("")
     const [error, setError] = useState("");
+    const ref = useRef(null)
 
     useEffect(() => {
         async function checkExistance() {
@@ -39,6 +46,12 @@ export default function ShowMessage() {
         checkExistance();
     }, [uuid]);
 
+    useEffect(() => {
+        if (message && language) {
+            Prism.highlightAll();
+        }
+    }, [message, language]);
+
     async function fetchMessage() {
         try {
             const url = `http://localhost:8080/api/secretmessage/showmessage/${uuid}`;
@@ -49,7 +62,7 @@ export default function ShowMessage() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    password: password,
+                    password: password
                 }),
             });
 
@@ -68,8 +81,13 @@ export default function ShowMessage() {
                 return;
             }
 
-            const text = await res.text();
-            setMessage(text);
+            const data = await res.json();
+
+            setMessage(data.message);
+            setLanguage(data.language);
+
+            Prism.highlightAll();
+            setExist(false);
         } catch (e) {
             setError("Could not connect to server");
         } finally {
@@ -91,7 +109,12 @@ export default function ShowMessage() {
                 </>
             )}
             <h2>Secret Message</h2>
-            {loading ? <p>Loading...</p> : <div>{error || message}</div>}
+            {loading ? <p>Loading...</p> :
+                <pre className={`language-${language}`}>
+                    <code ref={ref} className={`language-${language}`}>
+                    {message}
+                    </code>
+                </pre>}
         </div>
     );
 }

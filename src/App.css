@@ -2,7 +2,6 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
 }
 
 .logo {
@@ -28,7 +27,7 @@
 }
 
 textarea {
-  width: 500px;
+  width: 100%;
   height: 250px;
 }
 
