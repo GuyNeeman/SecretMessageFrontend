@@ -3,6 +3,7 @@ import './App.css';
 import ShowMessage from "./Components/ShowMessage.jsx";
 import CreateMessage from "./Components/CreateMessage.jsx";
 import { Navbar, Nav, Container } from "react-bootstrap";
+import Show from "./Components/Show.jsx";
 
 function App() {
     return (
@@ -25,6 +26,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<CreateMessage />} />
                 <Route path="/show/:uuid" element={<ShowMessage />} />
+                <Route path="/show" element={<Show/>} />
             </Routes>
         </BrowserRouter>
     );

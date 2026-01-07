@@ -12,7 +12,6 @@ export default function CreateMessage() {
     const [error, setError] = useState("");
     const [response, setResponse] = useState("");
     const [sent, setSent] = useState(false);
-
     async function onSubmit(e) {
         let totalMinutes;
         e.preventDefault();
